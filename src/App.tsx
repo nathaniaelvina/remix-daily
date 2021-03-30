@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {View, Button, StyleSheet} from 'react-native';
 import Daily, {DailyEvent} from '@daily-co/react-native-daily-js';
 
 import {createMeeting} from './av/createMeeting';
@@ -60,9 +60,7 @@ export default function App() {
 
   return (
     <View style={styles.root}>
-      <TouchableOpacity onPress={onStartCallPress} style={styles.button}>
-        <Text>Start Call</Text>
-      </TouchableOpacity>
+      <Button onPress={onStartCallPress} title="Start Call" />
     </View>
   );
 }
@@ -72,10 +70,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  button: {
-    width: 300,
-    height: 40,
-    backgroundColor: 'tomato',
   },
 });
