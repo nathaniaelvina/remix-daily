@@ -1,2 +1,2 @@
 export const DAILY_KEY = '';
-export const WEBHOOK_HOST = '';
+export const ORGANIZATION_NAME = 'remixhq';

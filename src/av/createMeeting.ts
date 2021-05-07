@@ -1,4 +1,4 @@
-import {DAILY_KEY, WEBHOOK_HOST} from '../constants';
+import { DAILY_KEY, WEBHOOK_HOST } from '../constants';
 
 export async function createMeeting(meetingId: string) {
   let url = 'https://api.daily.co/v1/rooms';

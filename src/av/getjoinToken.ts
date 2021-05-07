@@ -1,4 +1,4 @@
-import {DAILY_KEY} from '../constants';
+import { DAILY_KEY } from '../constants';
 
 export async function getJoinToken(id: string, meetingId: string) {
   let url = 'https://api.daily.co/v1/meeting-tokens';
