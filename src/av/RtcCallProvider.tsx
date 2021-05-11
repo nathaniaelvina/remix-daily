@@ -36,6 +36,8 @@ export function RtcCallProvider({ children }: Props) {
     await callObject.leave();
     await callObject.destroy();
     setCallObject(undefined);
+    // NOTE: adding delay works
+    // await delay(3000);
   }, [callObject]);
 
   return (
@@ -51,4 +53,8 @@ export function useRtcCallContext() {
     throw new Error('useRtcCallContext must be inside a RtcCallProvider');
   }
   return context;
+}
+
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
