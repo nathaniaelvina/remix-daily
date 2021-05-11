@@ -1,14 +1,5 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import Daily, {
-  DailyCall,
-  DailyEventObjectAppMessage,
-} from '@daily-co/react-native-daily-js';
+import React, { createContext, useCallback, useContext, useState } from 'react';
+import Daily, { DailyCall } from '@daily-co/react-native-daily-js';
 import { ORGANIZATION_NAME } from '../constants';
 
 type Props = {
@@ -24,24 +15,6 @@ const Context = createContext<RtcCallContext | undefined>(undefined);
 
 export function RtcCallProvider({ children }: Props) {
   const [callObject, setCallObject] = useState<DailyCall | undefined>();
-
-  useEffect(() => {
-    if (!callObject) {
-      return;
-    }
-
-    function handleAppMessage(event?: DailyEventObjectAppMessage) {
-      if (event) {
-        console.log(`received app message from ${event.fromId}: `, event.data);
-      }
-    }
-
-    callObject.on('app-message', handleAppMessage);
-
-    return function cleanup() {
-      callObject.off('app-message', handleAppMessage);
-    };
-  }, [callObject]);
 
   let joinCall = useCallback(async (joinToken: string, meetingId: string) => {
     let callObj = Daily.createCallObject();
