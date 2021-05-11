@@ -1,37 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, SafeAreaView, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { getJoinToken } from '../av/getjoinToken';
 import { useRtcCallContext } from '../av/RtcCallProvider';
-import { createMeeting } from '../av/createMeeting';
 
 export function CallOneScene() {
-  let callContext = useRtcCallContext();
+  const [tokenOne, setTokenOne] = useState('');
+  let { joinCall, leaveCall } = useRtcCallContext();
   let meetingId = 'remixCallOne';
   let { navigate, goBack } = useNavigation();
 
   useEffect(() => {
+    console.log('masuk effect');
     let join = async () => {
-      // await createMeeting(meetingId);
       let userId = generateUserId();
       let token = await getJoinToken(userId, meetingId);
-      callContext.joinCall(token, meetingId);
+      joinCall(token, meetingId);
+      setTokenOne(token);
     };
     join();
-  }, [callContext, meetingId]);
+  }, [joinCall, meetingId]);
 
   let onEnterRoomTwo = async () => {
     let userId = generateUserId();
     let roomTwoId = 'remixCallTwo';
     // await createMeeting(roomTwoId);
     let token = await getJoinToken(userId, roomTwoId);
-    callContext.joinCall(token, roomTwoId);
+    await leaveCall();
+    joinCall(token, roomTwoId);
 
-    navigate('CallTwo');
+    navigate('CallTwo', {
+      token: tokenOne,
+      meetingId,
+    });
   };
 
   let onBackPress = async () => {
-    await callContext.leaveCall();
+    await leaveCall();
     goBack();
   };
 
