@@ -1,4 +1,4 @@
-import { DAILY_KEY, WEBHOOK_HOST } from '../constants';
+import { DAILY_KEY } from '../constants';
 
 export async function createMeeting(meetingId: string) {
   let url = 'https://api.daily.co/v1/rooms';
@@ -12,7 +12,6 @@ export async function createMeeting(meetingId: string) {
       properties: {
         sfu_switchover: 1,
         signaling_impl: 'ws',
-        meeting_join_hook: WEBHOOK_HOST ? `${WEBHOOK_HOST}/join` : undefined,
       },
       name: meetingId,
       privacy: 'private',
