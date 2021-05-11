@@ -3,10 +3,11 @@ import { Button, SafeAreaView, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { getJoinToken } from '../av/getjoinToken';
 import { useRtcCallContext } from '../av/RtcCallProvider';
+import { ORGANIZATION_NAME } from '../constants';
 
 export function CallOneScene() {
   const [tokenOne, setTokenOne] = useState('');
-  let { joinCall, leaveCall } = useRtcCallContext();
+  let { callObject } = useRtcCallContext();
   let meetingId = 'remixCallOne';
   let { navigate, goBack } = useNavigation();
 
@@ -15,20 +16,35 @@ export function CallOneScene() {
     let join = async () => {
       let userId = generateUserId();
       let token = await getJoinToken(userId, meetingId);
-      joinCall(token, meetingId);
+      await callObject.join({
+        url: `https://${ORGANIZATION_NAME}.daily.co/${meetingId}`,
+        token,
+        // @ts-ignore
+        audioSource: true,
+        // @ts-ignore
+        videoSource: false,
+      });
+
       setTokenOne(token);
     };
     join();
-  }, [joinCall, meetingId]);
+  }, [callObject, meetingId]);
 
   let onEnterRoomTwo = async () => {
     let userId = generateUserId();
     let roomTwoId = 'remixCallTwo';
     // await createMeeting(roomTwoId);
     let token = await getJoinToken(userId, roomTwoId);
-    await leaveCall();
-    joinCall(token, roomTwoId);
+    await callObject.leave();
 
+    await callObject.join({
+      url: `https://${ORGANIZATION_NAME}.daily.co/${roomTwoId}`,
+      token,
+      // @ts-ignore
+      audioSource: true,
+      // @ts-ignore
+      videoSource: false,
+    });
     navigate('CallTwo', {
       token: tokenOne,
       meetingId,
@@ -36,7 +52,7 @@ export function CallOneScene() {
   };
 
   let onBackPress = async () => {
-    await leaveCall();
+    await callObject.leave();
     goBack();
   };
 
